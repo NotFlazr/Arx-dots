@@ -1,0 +1,41 @@
+#!/bin/bash
+# Wallpaper controlling wallpaperer for Rofi
+
+# Directory containing wallpapers
+WALL_DIR="$HOME/.config/walls"
+
+# Save current directory to return later
+CWD="$(pwd)"
+
+cd "$WALL_DIR" || exit 1
+
+# Handle spaces in filenames
+IFS=$'\n'
+
+# Grab the user-selected wallpaper (jpg/png/mp4)
+SELECTED_WALL=$(for a in *.jpg *.png *.mp4; do
+    # skip if it’s a generated thumbnail (ends with .jpg and has a corresponding .mp4)
+    if [[ "$a" == *.jpg && -f "${a%.jpg}.mp4" ]]; then
+        continue
+    fi
+
+    icon="$a"
+    if [[ "$a" == *.mp4 ]]; then
+        thumb="${a%.*}.jpg"
+        # create thumbnail if missing
+        [[ ! -f "$thumb" ]] && ffmpeg -y -i "$a" -frames:v 1 "$thumb" >/dev/null 2>&1
+        icon="$thumb"
+    fi
+
+    echo -en "$a\0icon\x1f$icon\n"
+done | rofi -dmenu -p "Select Wallpaper" -config ~/.config/rofi/wallpaper.rasi)
+
+
+# If user selected something, set it
+if [ -n "$SELECTED_WALL" ]; then
+    arx img "$SELECTED_WALL"
+fi
+
+# Return to original directory
+cd "$CWD" || exit 1
+

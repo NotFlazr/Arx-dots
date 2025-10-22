@@ -1,0 +1,72 @@
+/* Dark theme for wallpaper picker */
+@import "~/.config/rofi/base16-default-dark.rasi"
+
+configuration {
+  show-icons: true;
+  scrollbar: false;
+  icon-size: 100;
+  drun-display-format: "{icon} {text}";
+  lines: 1;
+  columns: 3;
+}
+
+window {
+    location: south;
+    anchor: center;
+    transparency: "real";
+    padding: 20px;
+    border: 0px;
+    border-radius: 5px;
+    width: 1250;
+    height: 180;
+    spacing: 0;
+    children: [mainbox];
+    orientation: horizontal;
+}
+
+mainbox {
+    spacing: 0;
+    children: [ listview ];
+}
+
+inputbar {
+    padding: 15px;
+    border-radius: 15px 15px 0px 0px;
+    font: "Source Code Pro 18";
+}
+
+entry, prompt, case-indicator {
+    text-font: inherit;
+    text-color: inherit;
+}
+
+listview {
+    padding: 0px;
+    border-radius: 0px 0px 15px 15px;
+    dynamic: false;
+    lines: 1;
+    columns: 3;
+}
+
+element {
+    padding: 5px;
+    border-radius: 8px;
+    background-color: transparent;
+    color: @foreground;
+    font: inherit;
+    orientation: vertical;
+}
+
+element-icon {
+    size: 100px;
+    horizontal-align: 0.5;
+}
+
+element-text {
+    background-color: inherit;
+    text-color: white;
+    horizontal-align: 0.5;
+    margin: 0px;
+    padding: 0px;
+}
+

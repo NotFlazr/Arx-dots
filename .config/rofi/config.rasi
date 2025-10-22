@@ -1,0 +1,102 @@
+/* Dark theme. */
+@import "~/.config/rofi/base16-default-dark.rasi"
+configuration {
+  show-icons: true;
+  scrollbar: false;
+  icon-size: 128;
+  drun-display-format: "{icon} {name}";
+  lines: 6;
+
+}
+/**
+ * ROFI Color theme
+ * User: Qball
+ * Copyright: Dave Davenport
+ */
+window {
+    location: center;
+    anchor:   center;
+    transparency: "real";
+    padding: 10px;
+    border:  0px;
+    border-radius: 5px;
+width:350;
+height:350;
+    spacing: 0;
+    children:  [mainbox];
+    orientation: horizontal;
+}
+mainbox {
+    spacing: 0;
+    children: [ inputbar, message, listview ];
+}
+message {
+//    border-radius: 10px;
+    padding: 5;
+
+}
+message {
+    font: "Source Code Pro 8";
+}
+inputbar {
+
+    padding: 11px;
+
+    border-radius:  15px 15px 0px 0px;
+
+    font: "Source Code Pro 18";
+}
+entry,prompt,case-indicator {
+    text-font: inherit;
+    text-color:inherit;
+}
+prompt {
+    margin:     0px 0.3em 0em 0em ;
+}
+listview {
+    padding: 8px;
+    border-radius: 0px 0px 15px 15px;
+
+    dynamic: false;
+    lines: 10;
+}
+element-icon {
+  icon-size: 128px;
+}
+element {
+    padding: 20px;
+    vertical-align: 0.5;
+//    border: 2px;
+    border-radius: 14px;
+    background-color: transparent;
+    color: @active-background;
+    font:inherit;
+}
+element-text {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+mode-switcher {
+    expand: false;
+    orientation: vertical;
+    spacing: 0px;
+    border: 0px 0px 0px 0px;
+}
+button {
+    font: "FontAwesome 22";
+    padding: 6px;
+
+    border-radius: 4px 0px 0px 4px;
+
+    color: @active-background;
+    horizontal-align: 0.5;
+}
+button selected normal {
+  background-color: @active-background;
+}
+error-message {
+    expand: true;
+    border: 2px;
+    padding: 1em;
+}
