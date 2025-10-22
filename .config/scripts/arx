@@ -1,0 +1,54 @@
+#!/bin/bash
+source ~/.cache/wal/colors.sh
+
+Image=$2
+Option=$1
+
+if [ -z "$1" ]; then
+    echo ""
+    echo -e "\033[38;5;3m╔═══════════════════════════════════╗\033[0m"
+    echo -e "\033[38;5;3m║\033[0m          \033[1;38;5;6mARX CONTROL\033[0m              \033[38;5;3m║\033[0m"
+    echo -e "\033[38;5;3m╚═══════════════════════════════════╝\033[0m"
+    echo ""
+    echo -e "  \033[2;37mYour system, simplified.\033[0m"
+    echo -e "  Run '\033[1;38;5;4marx help\033[0m' to get started."
+    echo ""
+
+elif [ "$1" = "help" ]; then
+    echo -e "\033[38;5;3mNeed help?"
+    echo -e "\033[38;5;3mHere is your command list:"
+    echo -e "\033[38;5;3m  *update: Updates the system including AUR"
+    echo -e "\033[38;5;3m  *img: Set your wallpaper + waybar colors etc"
+    echo ""
+
+elif [ "$1" = "update" ]; then
+    sudo pacman -Syu
+    yay -Syu
+
+elif [ "$1" = "img" ] && [ -z "$Image" ]; then
+    notify-send "Provide a wallpaper path"
+
+elif [ "$1" = "img" ] && [ ! -e "$Image" ]; then
+    notify-send "What am I supposed to use? Your imaginary wallpaper?"
+    echo "File not found: $Image"
+
+elif [ "$1" = "img" ] && [ -e "$Image" ]; then
+    swww img "$Image" --transition-type center --transition-fps 120 --transition-step 60 || {
+        notify-send "Failed to set wallpaper"
+        exit 1
+    }
+    
+    wal -i "$Image" -n -e --cols16
+    pkill mako
+    mako &
+    matugen image "$Image"
+    notify-send "Your theme has been changed to $Image" -i "$Image"
+    
+    pywal-discord
+    xrdb -merge ~/.cache/wal/colors.Xresources
+    cat ~/.config/walker/themes/pywal/colors.css ~/.config/walker/themes/pywal/style-copy.css > ~/.config/walker/themes/pywal/style.css
+
+else
+    echo "Unknown command: $1"
+    echo "Use 'arx help' for available commands"
+fi

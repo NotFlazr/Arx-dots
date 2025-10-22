@@ -1,0 +1,12 @@
+#!/bin/bash
+
+Image=$(sxiv -to "$HOME/.config/walls/")
+echo "$Image"
+
+if [ -z "$Image" ];then
+  notify-send "No changing huh?"
+elif [ ! -e "$Image" ];then
+  notify-send "Idoit find a proper wallpaper"
+else
+  arx img "$Image"
+fi

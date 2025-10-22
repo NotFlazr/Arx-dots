@@ -1,0 +1,4 @@
+default:
+  extension: .ini
+  output: colors
+
