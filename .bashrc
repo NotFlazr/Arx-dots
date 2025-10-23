@@ -1,3 +1,4 @@
+export PATH="$HOME/.nimble/bin:$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
 eval "$(oh-my-posh init bash --config /home/flazr/bubbles.omp.json)"
 
 export PATH="$HOME/.nimble/bin:$HOME/.cargo/bin:$HOME/.local/bin:$PATH"

@@ -1,60 +1,72 @@
 #!/bin/bash
+# ARX Control Script
+# Usage: arx [help|update|img <file>]
+
 source ~/.cache/wal/colors.sh
-Image=$2
 Option=$1
-Wlist=("Style1" "Style2")
-if [ -z "$1" ];then
-echo ""
-echo -e "\033[38;5;3m╔═══════════════════════════════════╗\033[0m"
-echo -e "\033[38;5;3m║\033[0m          \033[1;38;5;6mARX CONTROL\033[0m              \033[38;5;3m║\033[0m"
-echo -e "\033[38;5;3m╚═══════════════════════════════════╝\033[0m"
-echo ""
-echo -e "  \033[2;37mYour system, simplified.\033[0m"
-echo -e "  Run '\033[1;38;5;4marx help\033[0m' to get started."
-echo ""
-elif [ "$1" = "help" ]; then
-  echo -e "\033[38;5;3m Need help?"
-    echo -e "\033[38;5;3m Here your command list"
-      echo -e "\033[38;5;3m *update:Updates the system including aur"
-        echo -e "\033[38;5;3m *img:Set your wallpaper + waybar colors etc           "
-elif [ "$1" = "update" ];then
-  sudo pacman -Syu
-  yay -Syu
-elif [[ "$1" = "img" && -z "$Image"  ]]; then
-    notify-send "Provide a wallpaper path"
-elif [[ "$1" = "img" && ! -e "$Image" ]];then
-  notify-send "What am I supposed to use? Your imaginary wallpaper?"
-echo What am i supposed to use? Your imaginary wallpaper
-elif [[ "$1" = "img" && -e "$Image" ]]; then
- #mpvpaper -o "--loop --no-audio" eDP-1 "$Image"
-# Run yinctl and strip ANSI escape sequences, then send as one-line message
-yinctl --img "$Image" 2>&1 | stdbuf -oL tr '\r' '\n' | while IFS= read -r line; do
-  clean=$(echo "$line" | sed 's/\x1b\[[0-9;]*m//g')
-  notify-send  "🖼️ Yin Caching..." "$clean"
-done
+Image=$2
+
+if [ -z "$Option" ]; then
+    echo -e "\033[38;5;3m╔═══════════════════════════════════╗\033[0m"
+    echo -e "\033[38;5;3m║\033[0m          \033[1;38;5;6mARX CONTROL\033[0m              \033[38;5;3m║\033[0m"
+    echo -e "\033[38;5;3m╚═══════════════════════════════════╝\033[0m"
+    echo -e "  \033[2;37mYour system, simplified.\033[0m"
+    echo -e "  Run '\033[1;38;5;4marx help\033[0m' to get started."
+elif [ "$Option" = "help" ]; then
+    echo -e "\033[38;5;3mCommands:"
+    echo -e " * update: Updates system and AUR"
+    echo -e " * img <file>: Set wallpaper (supports images/videos)"
+elif [ "$Option" = "update" ]; then
+    sudo pacman -Syu
+    yay -Syu
+elif [[ "$Option" = "img" && -z "$Image" ]]; then
+    notify-send "ARX" "Provide a wallpaper path"
+elif [[ "$Option" = "img" && ! -e "$Image" ]]; then
+    notify-send "ARX" "File not found: $Image"
+else
+    # Handle video vs image
+    if [[ "$Image" == *.mp4 ]]; then
+        # Extract first frame for flavours & notifications
+        FIRST_FRAME="$HOME/.cache/wall.jpg"
+        ffmpeg -y -i "$Image" -frames:v 1 -vf "scale=iw:ih,format=yuv420p" -q:v 2 "$FIRST_FRAME" >/dev/null 2>&1
+        THUMB="$FIRST_FRAME"
+    else
+        THUMB="$Image"
+    fi
+
+    # Notify live Yin progress
+    yinctl --img "$Image" 2>&1 | stdbuf -oL tr '\r' '\n' | while IFS= read -r line; do
+        clean=$(echo "$line" | sed 's/\x1b\[[0-9;]*m//g')
+        notify-send -r 9999 -i "$THUMB" "🖼️ Yin Caching..." "$clean"
+    done
+    flavours generate dark "$THUMB"
+    flavours apply generated
+    # Final notification
+    notify-send -i "$THUMB" "✅ ARX" "Wallpaper cached: $Image"
+
+    # Apply theme/colors using image (or first frame)
 
 
-cp "$Image" ~/.cache/wallchosen.jpg -rf
-ffmpeg -y -hide_banner -loglevel error -ss 0 -i $Image -frames:v 1 -q:v 2 "$HOME/.cache/wallchosen.jpg"
+    # GTK theme reset (dummy → FlatColor)
+   gsettings set org.gnome.desktop.interface gtk-theme dummy
+   gsettings set org.gnome.desktop.interface gtk-theme FlatColor
 
-#swww img "$Image"  --transition-type center --transition-fps 120 --transition-step 60
- flavours generate dark ~/.cache/wallchosen.jpg
-flavours apply generated
-gsettings set org.gnome.desktop.interface gtk-theme dummy && gsettings set org.gnome.desktop.interface gtk-theme FlatColor
-#wal -i "$Image" -n  --cols16
-#matugen image "$Image"
-pkill mako
-mako &
-notify-send "Your theme has been changed to $Image" -i "$Image" 
-pywal-discord
-xrdb -merge ~/.cache/wal/colors.Xresources 
-cat ~/.config/walker/themes/pywal/colors.css ~/.config/walker/themes/pywal/style-copy.css > ~/.config/walker/themes/pywal/style.css
-cat ~/.config/foot/colors.ini ~/.config/foot/part2.ini > ~/.config/foot/foot.ini
-#elif [ ! -e "$Image" ]; then
- # notify-send "What am I supposed to use? Your imaginary wallpaper?"
- # exit 1
-#else
- # notify-send "Using" "$Image"
- # swww img "$Image"  --transition-type center --transition-fps 120 --transition-step 60
-# wal -i "$Image" -n --cols16
+    # Restart mako
+    pkill mako
+    mako &
+
+    # Pywal Discord integration
+    pywal-discord
+
+    # Merge Xresources colors
+    xrdb -merge ~/.cache/wal/colors.Xresources
+
+    # Update CSS for walker theme
+    cat ~/.config/walker/themes/pywal/colors.css ~/.config/walker/themes/pywal/style-copy.css > ~/.config/walker/themes/pywal/style.css
+
+    # Update foot terminal colors
+    cat ~/.config/foot/colors.ini ~/.config/foot/part2.ini > ~/.config/foot/foot.ini
+    pkill waybar
+    waybar &
 fi
+
