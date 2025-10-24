@@ -34,11 +34,11 @@ This repo contains all the configs and scripts that make up my personal Arch set
 - **Foot** — My terminal emulator of choice.  
 - **Mako** — Notification daemon (used instead of `swaync`).  
 - **Yin** — Handles both live and static wallpapers (`.mp4` and `.jpg`).  
-  _Why Yin? Because converting MP4s to GIFs is pain 😭._
+  _Why Yin? Because using swww and converting MP4s to GIFs is pain 😭._
 
 ### 🖼 Wallpapers
 - Wallpapers are stored in `~/.config/walls`.
-- Includes both static and live wallpapers (used with Yin or swww).
+- Includes both static and live wallpapers (used with Yin).
 - A few sample wallpapers are included since this repo also serves as a **backup** for my setup.
 
 ### 🧠 Extras
