@@ -23,3 +23,4 @@ also make sure you got git
 then cd into the directory and do stow .
 Make sure you don't delete the files as all the files are linked to the github repo folder
 so deleteing it causes alot of issues
+<img width="1366" height="769" alt="image" src="https://github.com/user-attachments/assets/f5573f84-173b-412c-91d0-8ad4479d558d" />
