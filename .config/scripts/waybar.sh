@@ -1,0 +1,3 @@
+pkill waybar
+waybar &
+# vim:fileencoding=utf-8:foldmethod=marker

@@ -1,0 +1,64 @@
+#!/bin/bash
+# ARX Control Script
+# Usage: arx [help|update|img <file>]
+
+source ~/.cache/wal/colors.sh
+Option=$1
+Image=$2
+
+if [ -z "$Option" ]; then
+    echo -e "\033[38;5;3m╔═══════════════════════════════════╗\033[0m"
+    echo -e "\033[38;5;3m║\033[0m          \033[1;38;5;6mARX CONTROL\033[0m              \033[38;5;3m║\033[0m"
+    echo -e "\033[38;5;3m╚═══════════════════════════════════╝\033[0m"
+    echo -e "  \033[2;37mYour system, simplified.\033[0m"
+    echo -e "  Run '\033[1;38;5;4marx help\033[0m' to get started."
+elif [ "$Option" = "help" ]; then
+    echo -e "\033[38;5;3mCommands:"
+    echo -e " * update: Updates system and AUR"
+    echo -e " * img <file>: Set wallpaper (supports images/videos)"
+elif [ "$Option" = "update" ]; then
+    sudo pacman -Syu
+    yay -Syu
+elif [[ "$Option" = "img" && -z "$Image" ]]; then
+    notify-send "ARX" "Provide a wallpaper path"
+elif [[ "$Option" = "img" && ! -e "$Image" ]]; then
+    notify-send "ARX" "File not found: $Image"
+else
+    # Handle video vs image
+    if [[ "$Image" == *.mp4 ]]; then
+        # Extract first frame for flavours & notifications
+        FIRST_FRAME="$HOME/.cache/wall.jpg"
+        ffmpeg -y -i "$Image" -frames:v 1 -vf "scale=iw:ih,format=yuv420p" -q:v 2 "$FIRST_FRAME" >/dev/null 2>&1
+        THUMB="$FIRST_FRAME"
+    else
+        THUMB="$Image"
+    fi
+
+    # Notify live Yin progress
+    yinctl --img "$Image" 2>&1 | stdbuf -oL tr '\r' '\n' | while IFS= read -r line; do
+        clean=$(echo "$line" | sed 's/\x1b\[[0-9;]*m//g')
+        notify-send -r 9999 -i "$THUMB" "🖼️ Yin Caching..." "$clean"
+    done
+    wal -n -i "$THUMB"
+
+    # Final notification
+    notify-send -i "$THUMB" "✅ ARX" "Wallpaper cached: $Image"
+
+    # Apply theme/colors using image (or first frame)
+
+
+    # GTK theme reset (dummy → FlatColor)
+#apply discord theme
+pywal-discord
+
+    # Restart mako
+    pkill mako
+    mako &
+
+
+    # Update foot terminal colors
+    cat ~/.config/foot/colors.ini ~/.config/foot/part2.ini > ~/.config/foot/foot.ini
+    pkill waybar
+    waybar &
+fi
+

@@ -1,0 +1,305 @@
+@import url("colors-waybar.css");
+@import url("file:///usr/share/fonts/TTF/IosevkaNerdFontMono-Regular.ttf");
+
+* {
+    font-family:"Fira Code Nerd Font", Arial, "GeistMono Nerd";
+    font-size: 12px;
+}
+
+window#waybar {
+    padding-top: 20px;
+    background-color: @background;
+    border-bottom: 2px solid alpha(#080C15, 1);
+    color: #ffffff;
+    transition-duration: 0.1s;
+    font-family: "Iosevka";
+    padding: 10px;
+    min-height: 30px;
+    font-size: 11px;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+window#waybar.termite {
+    background-color: #3F3F3F;
+}
+
+window#waybar.chromium {
+    background-color: #000000;
+    border: none;
+}
+
+button {
+    border: none;
+    border-radius: 0;
+}
+
+button:hover {
+    background: inherit;
+}
+
+/* Workspaces */
+#workspaces {
+    background-color: transparent;
+    border-radius: 9999px;
+    margin: 0 10px 0 0;
+}
+
+#workspaces button {
+    min-width: 8px;
+    min-height: 8px;
+    margin: 0 9px 0 2.5px;
+    border-radius: 50%;
+    padding: 0;
+    color: @color10;
+    font-size: 0px;
+    border: 0px solid rgba(0,127,84,0.0);
+}
+
+#workspaces button.active {
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 50%;
+    margin: 0 9px 0 2.5px;
+    padding: 0;
+    color: @color10;
+    font-size: 0px;
+    border: 0px solid rgba(0,255,167,0.0);
+}
+
+#workspaces button:hover {
+    border-radius: 10px;
+    border: 0px solid rgba(0,255,167,0.0);
+}
+
+#workspaces button.focused {
+    background-color: white;
+    border: 0px solid rgba(0,255,167,0.0);
+    border-radius: 10px;
+}
+
+#workspaces button.urgent {
+    background-color: transparent;
+    color: #B03F4F;
+    border-radius: 10px;
+}
+
+#taskbar {
+    margin-right: 2px;
+}
+
+/* Module defaults */
+#mode {
+    background-color: white;
+}
+
+#custom-arch,
+#custom-separator,
+#custom-separator2,
+#backlight,
+#bluetooth,
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon,
+#mpd {
+    padding: 0 3px;
+    color: @color10;
+    font-size: 12.5px;
+}
+
+#custom-arch {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+#window,
+#workspaces {
+    margin: 0;
+}
+
+#groupp-tray {
+    margin: 0;
+}
+
+/* Clock */
+#clock {
+    margin: 0 3px 0 4px;
+    padding: 0;
+    font-size: 15px;
+    font-family: "nomdale";
+}
+
+#tray {
+    color: @color12;
+    margin-right: 30px;
+}
+
+/* Separator */
+#custom-separator {
+    padding: 0;
+    margin: 0;
+}
+
+/* Groups */
+#group-separator {
+    padding: 0;
+    margin: 0;
+}
+
+#group-backlight {
+    padding: 0;
+    margin: 0;
+}
+
+#group-pulseaudio {
+    margin: 0;
+}
+
+#group-tray {
+    padding: 0;
+    margin: 0;
+}
+
+/* Bluetooth */
+#bluetooth {
+    padding: 3px 6px;
+    margin-right: 1px;
+    font-size: medium;
+}
+
+/* Backlight */
+#backlight {
+    padding: 0;
+    margin-right: 1px;
+}
+
+#backlight-slider slider {
+    min-height: 0;
+    min-width: 0;
+    opacity: 0;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+
+#backlight-slider trough {
+    min-height: 80px;
+    min-width: 0;
+    border-radius: 9999px;
+    background-color: black;
+}
+
+#backlight-slider highlight {
+    min-width: 2px;
+    border-radius: 9999px;
+    background-color: @base0C;
+}
+
+/* Pulseaudio */
+#pulseaudio {
+    margin: 0 1.5px 0 0;
+}
+
+#pulseaudio-slider {
+    padding: 0;
+    margin: 0 1.5px 0 0;
+}
+
+#pulseaudio-slider slider {
+    min-height: 0;
+    min-width: 0;
+    opacity: 0;
+    font-size: smaller;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+
+#pulseaudio-slider trough {
+    min-height: 80px;
+    min-width: 0;
+    border-radius: 4px;
+    background-color: black;
+}
+
+#pulseaudio-slider highlight {
+    min-width: 2px;
+    border-radius: 4px;
+    background-color: @base0C;
+}
+
+/* Network */
+#network {
+    padding: 3px 10px;
+    margin: 0 3px 0 1px;
+}
+
+#network.disconnected {
+    color: #f53c3c;
+}
+
+/* Tray */
+#tray {
+    font-size: smaller;
+    padding: 3px 6px;
+    margin-right: 2px;
+}
+
+#group-commonthings {
+    background-color: black;
+    background: alpha(@color9,0.9);
+    border-radius: 9999px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: #eb4d4b;
+}
+
+/* MPD */
+#mpd {
+    background-color: #66cc99;
+    color: #2a5c45;
+}
+
+#mpd.disconnected {
+    background-color: #f53c3c;
+}
+
+#mpd.stopped {
+    background-color: #90b1b1;
+}
+
+#mpd.paused {
+    background-color: #51a37a;
+}
+
+/* Animations */
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}
+
+label:focus {
+    background-color: #000000;
+}
