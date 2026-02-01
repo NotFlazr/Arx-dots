@@ -52,5 +52,6 @@ This repo contains all the configs and scripts that make up my personal Arch set
 ## 🧰 Installation
 
 Make sure you have the following installed:
-sudo pacman -S git stow waybar foot mako hyprland python flavours
+
 ```bash
+sudo pacman -S git stow waybar foot mako hyprland python flavours
